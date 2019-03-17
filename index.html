@@ -1,0 +1,146 @@
+<html>
+    <head>
+        <title>Calculator</title>
+        <style>
+            body {
+                font-family: helvetica, sans-serif;
+                background-color: rgb(239,118,125);
+                color: white;
+            }
+        
+            .calculator {
+                margin: 0 auto;
+                width: 350px;
+                border: 1px solid black;
+                border-radius: 10px;
+                padding: 10px;
+                background-color: rgb(30,28,31);
+            }
+
+            .display {
+                background-color: rgb(143,153,107);
+                font-family: 'Courier New', Courier, monospace;
+                font-size: 40px;
+                border-radius: 10px;
+                text-overflow: hidden;
+                text-align: right;
+                overflow:hidden;
+            }
+
+            .buttons {
+                display:flex;
+                flex-wrap: wrap;
+                justify-content: space-between;
+                flex-direction: row;
+            }
+
+            .button {
+                flex: 1 0 20%;
+                padding: 5px;
+                margin: 5px;
+                border: 1px solid black;
+                border-radius: 10px;
+                font-size: 48px;
+                width: 60px;
+                text-align: center;
+                background-color: rgb(88,89,91);
+            }
+        
+        </style>
+
+        <script>
+            function updateDisplay(value) {
+                console.log('value is:'+value);
+                if(value !== undefined) {
+                    document.getElementById('display').innerHTML = value;
+                } else if(entries.length == 0) {
+                    document.getElementById('display').innerHTML = '0';
+                } else {
+                    document.getElementById('display').innerHTML = window.entries.slice(-1)[0];
+                }
+            }
+
+            function doClick(i) {
+                var lastNumber = window.entries.slice(-1)[0];
+
+                console.log(i.id);
+
+                if(i.id == 'add') {
+                    window.entries.push('+');
+                } else if(i.id == 'subtract') {
+                    window.entries.push('-');
+                } else if(i.id == 'multiply') {
+                    window.entries.push('*');
+                } else if(i.id == 'divide') {
+                    window.entries.push('/');
+                } else if(i.id == 'decimal') {
+                    if(String(lastNumber).indexOf('.') == -1) {
+                        window.entries.pop();
+                        window.entries.push(lastNumber + '.');
+                    }
+
+                    updateDisplay();
+                } else if(i.id == 'clear') {
+                    delete window.entries;
+                    entries = [];
+                    updateDisplay();
+                } else if(i.id == 'equals') {
+                    var answer = eval(window.entries.join(''));
+                    delete window.entries;
+                    window.entries = [];
+                    window.entries.push(answer);
+                    updateDisplay(answer);
+                } else {
+                    if(typeof lastNumber == 'number') {
+                        window.entries.pop();
+                        window.entries.push(parseFloat(lastNumber+i.id));
+                    } else if(String(entries.slice(-1)[0]).substr(-1, 1) == ".") {
+                        window.entries.pop();
+                        window.entries.push(parseFloat(lastNumber+i.id));
+                    } else {
+                        window.entries.push(parseFloat(i.id));
+                    }
+                    updateDisplay();
+                }
+
+                console.log(window.entries);
+            }
+        </script>
+    </head>
+    <body>
+        <div class="calculator">
+            <p><h1>Ihaka's Calculator</h1></p>
+
+            <div id="display" class="display">
+            </div>
+
+            <div class="buttons">
+                <div class="button" id="0" onclick="doClick(this);">0</div>
+                <div class="button" id="1" onclick="doClick(this);">1</div>
+                <div class="button" id="2" onclick="doClick(this);">2</div>
+                <div class="button" id="3" onclick="doClick(this);">3</div>
+                <div class="button" id="4" onclick="doClick(this);">4</div>
+                <div class="button" id="5" onclick="doClick(this);">5</div>
+                <div class="button" id="6" onclick="doClick(this);">6</div>
+                <div class="button" id="7" onclick="doClick(this);">7</div>
+                <div class="button" id="8" onclick="doClick(this);">8</div>
+                <div class="button" id="9" onclick="doClick(this);">9</div>
+                <div class="button" id="add" onclick="doClick(this);">+</div>
+                <div class="button" id="subtract" onclick="doClick(this);">-</div>
+                <div class="button" id="multiply" onclick="doClick(this);">X</div>
+                <div class="button" id="divide" onclick="doClick(this);">÷</div>
+                <div class="button" id="decimal" onclick="doClick(this);">.</div>
+                <div class="button" id="clear" onclick="doClick(this);">C</div>
+                <div class="button" id="equals" onclick="doClick(this);">=</div>
+            </div>
+
+        </div>
+
+        <script>
+        (function() {
+             entries = [];
+             updateDisplay();
+        })();
+        </script>
+    </body>
+</html>
